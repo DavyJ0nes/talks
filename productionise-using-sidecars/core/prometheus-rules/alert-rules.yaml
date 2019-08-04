@@ -1,0 +1,34 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-slo-alert-rules
+  labels:
+    release: monitoring
+    role: alert-rules
+    app: prometheus-operator
+spec:
+  groups:
+  - name: ./slo-alert.rules
+    rules:
+    - alert: ErrorBudgetBurn
+      expr: |2
+          (
+            100 * app:haproxy_backend_http_errors_per_response:ratio_rate1h
+          > on (job)
+            14.4 * app:error_slo:percent
+          )
+        and
+          (
+            100 * app:haproxy_backend_http_errors_per_response:ratio_rate5m
+          > on (job)
+            14.4 * app:error_slo:percent
+          )
+      for: 2m
+      labels:
+        system: "{{$labels.job}}"
+        severity: "page"
+        long_window: "1h"
+      annotations:
+        summary: "An app burns its error budget in the night"
+        description: "App {{$labels.job}} has returned {{ $value | printf `%.2f` }}% 5xx over the last hour."
+        runbook: "http://example.com/runbooks"

@@ -1,0 +1,41 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+    release: gophercon
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+        release: gophercon
+    spec:
+      terminationGracePeriodSeconds: 30
+      initContainers:
+        - name: api-checker
+          image: busybox:1.28
+          command: ['sh', '-c', 'until nslookup feelgood-api; do echo waiting for feelgood api; sleep 2; done;']
+      containers:
+        - name: frontend
+          image: davyj0nes/gophercon-frontend:v0.4.0
+          ports:
+            - containerPort: 4200
+          envFrom:
+            - configMapRef:
+                name: frontend-config
+        - name: proxy
+          image: 'haproxy:2.0.4'
+          ports:
+            - containerPort: 80
+            - containerPort: 9091
+          volumeMounts:
+            - mountPath: /usr/local/etc/haproxy/
+              name: haproxy-cfg
+      volumes:
+        - name: haproxy-cfg
+          configMap:
+            name: haproxy-config-frontend

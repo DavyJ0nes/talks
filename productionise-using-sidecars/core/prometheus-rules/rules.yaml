@@ -1,0 +1,46 @@
+apiVersion: monitoring.coreos.com/v1
+kind: PrometheusRule
+metadata:
+  name: prometheus-slo-rules
+  labels:
+    release: monitoring
+    role: recording-rules
+    app: prometheus-operator
+spec:
+  groups:
+  - name: ./slo.rules
+    interval: 5s
+    rules:
+    - record: app:error_slo:percent
+      labels:
+        job: "frontend-service"
+      expr: "0.1"
+    - record: app:error_slo:percent
+      labels:
+        job: "feelgood-api"
+      expr: "0.1"
+    - record: app:haproxy_backend_http_errors_per_response:ratio_rate1m
+      expr: |2
+          sum by (job) (rate(haproxy_backend_http_responses_total{code="5xx"}[1m]))
+        /
+          sum by (job) (rate(haproxy_backend_http_responses_total[1m]))
+    - record: app:haproxy_backend_http_errors_per_response:ratio_rate5m
+      expr: |2
+          sum by (job) (rate(haproxy_backend_http_responses_total{code="5xx"}[5m]))
+        /
+          sum by (job) (rate(haproxy_backend_http_responses_total[5m]))
+    - record: app:haproxy_backend_http_errors_per_response:ratio_rate30m
+      expr: |2
+          sum by (job) (rate(haproxy_backend_http_responses_total{code="5xx"}[30m]))
+        /
+          sum by (job) (rate(haproxy_backend_http_responses_total[30m]))
+    - record: app:haproxy_backend_http_errors_per_response:ratio_rate1h
+      expr: |2
+          sum by (job) (rate(haproxy_backend_http_responses_total{code="5xx"}[1h]))
+        /
+          sum by (job) (rate(haproxy_backend_http_responses_total[1h]))
+    - record: app:haproxy_backend_http_errors_per_response:ratio_rate2h
+      expr: |2
+          sum by (job) (rate(haproxy_backend_http_responses_total{code="5xx"}[2h]))
+        /
+          sum by (job) (rate(haproxy_backend_http_responses_total[2h]))

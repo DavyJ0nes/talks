@@ -1,0 +1,45 @@
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: frontend-config
+  namespace: default
+  labels:
+    version: v1
+data:
+  PORT: "4200"
+  API_ADDR: "http://localhost:8888"
+  GO_ENV: "development"
+
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: haproxy-config-frontend
+  namespace: default
+data:
+  haproxy.cfg: |
+    global
+      maxconn 100
+
+    defaults
+      mode http
+      timeout connect 5s
+      timeout client 5s
+      timeout server 5s
+
+    frontend proxy
+      bind *:80
+      mode http
+      default_backend frontend
+
+    frontend stats
+      bind *:9091
+      option http-use-htx
+      http-request use-service prometheus-exporter if { path /metrics }
+      stats enable
+      stats uri /stats
+      stats refresh 10s
+
+    backend frontend
+      server frontend localhost:4200

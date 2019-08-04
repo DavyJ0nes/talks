@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: frontend-service
+  labels:
+    release: monitoring
+    version: v1
+spec:
+  selector:
+    matchLabels:
+      app: frontend
+      release: gophercon
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+    - targetPort: 9091
+      interval: 5s
+      scheme: 'http'
+      path: /metrics
