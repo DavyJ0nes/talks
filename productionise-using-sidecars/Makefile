@@ -75,7 +75,7 @@ open_grafana:
 	$(call blue, "# Opening Grafana...")
 	@open http://localhost:$(kubectl describe svc monitoring-grafana | grep "^NodePort:" | awk '{print $NF}' | tr -d "/TCP")
 
-## images: creates dependany docker images
+## images: creates dependant docker images
 .PHONY: images
 images:
 	$(call blue, "# Creating and/or pulling images ...")
@@ -86,7 +86,7 @@ images:
 	@docker pull busybox:1.28
 	@docker pull davyj0nes:breaker:v0.1.0
 
-## initial: installs the inital version of the services
+## initial: installs the initial version of the services
 .PHONY: initial
 initial:
 	$(call blue, "# Creating inital version ...")
@@ -105,13 +105,11 @@ v1:
 v2:
 	$(call blue, "# Creating v2 version ...")
 	@kubectl apply -f manifests/v2/api/
-	@kubectl apply -f manifests/v2/frontend/
 
 ## v3: installs the v3 version of the services
 .PHONY: v3
 v3:
 	$(call blue, "# Creating v3 version ...")
-	@kubectl apply -f manifests/v3/api/
 	@kubectl apply -f manifests/v3/frontend/
 
 ## reset_demo: deletes all demo resources
