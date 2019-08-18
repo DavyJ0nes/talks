@@ -1,0 +1,21 @@
+---
+apiVersion: monitoring.coreos.com/v1
+kind: ServiceMonitor
+metadata:
+  name: feelgood-api
+  labels:
+    release: monitoring
+    version: v2
+spec:
+  selector:
+    matchLabels:
+      app: feelgood-api
+      release: gophercon
+  namespaceSelector:
+    matchNames:
+    - default
+  endpoints:
+    - targetPort: 9091
+      interval: 5s
+      scheme: 'http'
+      path: /metrics

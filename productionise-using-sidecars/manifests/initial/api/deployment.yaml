@@ -1,0 +1,21 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: feelgood-api
+  labels:
+    app: feelgood-api
+    release: gophercon
+    version: initial
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: feelgood-api
+        release: gophercon
+    spec:
+      containers:
+        - name: feelgood
+          image: 'awesome-corp/feelgood-api:0.0.3'
+          ports:
+            - containerPort: 8080

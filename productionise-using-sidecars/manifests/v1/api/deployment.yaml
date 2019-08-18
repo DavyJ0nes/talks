@@ -1,0 +1,47 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: feelgood-api
+  labels:
+    app: feelgood-api
+    release: gophercon
+    version: v1
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: feelgood-api
+        release: gophercon
+    spec:
+      containers:
+        - name: feelgood
+          image: 'awesome-corp/feelgood-api:0.0.3'
+          ports:
+            - containerPort: 8080
+          resources:
+            limits:
+              cpu: 200m
+              memory: 64Mi
+            requests:
+              cpu: 100m
+              memory: 32Mi
+        - name: proxy
+          image: 'haproxy:2.0.4'
+          resources:
+            limits:
+              cpu: 200m
+              memory: 256Mi
+            requests:
+              cpu: 100m
+              memory: 128Mi
+          ports:
+            - containerPort: 80
+            - containerPort: 9091
+          volumeMounts:
+            - mountPath: /usr/local/etc/haproxy/
+              name: haproxy-cfg
+      volumes:
+        - name: haproxy-cfg
+          configMap:
+            name: haproxy-config-api

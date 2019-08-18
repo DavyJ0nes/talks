@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: feelgood-api
+  labels:
+    app: feelgood-api
+    release: gophercon
+    version: initial
+spec:
+  selector:
+    app: feelgood-api
+    release: gophercon
+  ports:
+    - name: http
+      protocol: TCP
+      port: 80
+      targetPort: 8080
+  type: ClusterIP

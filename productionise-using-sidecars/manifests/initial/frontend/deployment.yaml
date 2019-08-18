@@ -1,0 +1,24 @@
+apiVersion: apps/v1beta1
+kind: Deployment
+metadata:
+  name: frontend
+  labels:
+    app: frontend
+    release: gophercon
+    version: initial
+spec:
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: frontend
+        release: gophercon
+    spec:
+      containers:
+        - name: frontend
+          image: davyj0nes/gophercon-frontend:v0.4.0
+          ports:
+            - containerPort: 4200
+          envFrom:
+            - configMapRef:
+                name: frontend-config
