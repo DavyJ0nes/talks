@@ -19,3 +19,7 @@ spec:
       interval: 5s
       scheme: 'http'
       path: /metrics
+    - targetPort: 8888
+      interval: 5s
+      scheme: 'http'
+      path: /metrics

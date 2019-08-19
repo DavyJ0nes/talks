@@ -15,3 +15,11 @@ spec:
       protocol: TCP
       port: 80
       targetPort: 80
+    - name: mertrics
+      protocol: TCP
+      port: 9091
+      targetPort: 9091
+    - name: breakerMertrics
+      protocol: TCP
+      port: 8888
+      targetPort: 8888

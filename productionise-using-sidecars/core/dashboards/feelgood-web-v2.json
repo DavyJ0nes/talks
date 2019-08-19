@@ -263,7 +263,7 @@
       "tableColumn": "",
       "targets": [
         {
-          "expr": "sum by (job) (rate(haproxy_backend_http_total_time_average_seconds{job=\"frontend-service\"}[1m]) / 2)",
+          "expr": "sum by (job) (rate(haproxy_backend_http_total_time_average_seconds{job=\"frontend-service\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "refId": "A"
@@ -948,7 +948,7 @@
       "steppedLine": false,
       "targets": [
         {
-          "expr": "sum by (job) (rate(haproxy_backend_http_total_time_average_seconds{job=\"frontend-service\"}[1m]) / 2)",
+          "expr": "sum by (job) (rate(haproxy_backend_http_total_time_average_seconds{job=\"frontend-service\"}[1m]))",
           "format": "time_series",
           "intervalFactor": 1,
           "legendFormat": "latency: {{ job }}",
@@ -1274,6 +1274,203 @@
         "align": false,
         "alignLevel": null
       }
+    },
+    {
+      "collapsed": false,
+      "gridPos": {
+        "h": 1,
+        "w": 24,
+        "x": 0,
+        "y": 22
+      },
+      "id": 30,
+      "panels": [],
+      "title": "Frontend Ambassador",
+      "type": "row"
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 0,
+        "y": 23
+      },
+      "id": 32,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "sum by (breaker_state) (rate(http_requests_total{job=\"frontend-service\"}[1m]))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "{{ breaker_state }}",
+          "refId": "A"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Frontend Circuit Breaker State",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
+    },
+    {
+      "aliasColors": {},
+      "bars": false,
+      "dashLength": 10,
+      "dashes": false,
+      "fill": 1,
+      "gridPos": {
+        "h": 7,
+        "w": 12,
+        "x": 12,
+        "y": 23
+      },
+      "id": 33,
+      "legend": {
+        "avg": false,
+        "current": false,
+        "max": false,
+        "min": false,
+        "show": true,
+        "total": false,
+        "values": false
+      },
+      "lines": true,
+      "linewidth": 1,
+      "links": [],
+      "nullPointMode": "null",
+      "options": {},
+      "percentage": false,
+      "pointradius": 2,
+      "points": false,
+      "renderer": "flot",
+      "seriesOverrides": [],
+      "spaceLength": 10,
+      "stack": false,
+      "steppedLine": false,
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.99, sum by (le, breaker_state) (rate(http_request_duration_seconds_bucket{job=\"frontend-service\"}[5m])))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "99th %ile: {{ breaker_state }}",
+          "refId": "C"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum by (le, breaker_state) (rate(http_request_duration_seconds_bucket{job=\"frontend-service\"}[5m])))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "95th %ile: {{ breaker_state }}",
+          "refId": "A"
+        },
+        {
+          "expr": "histogram_quantile(0.5, sum by (le, breaker_state) (rate(http_request_duration_seconds_bucket{job=\"frontend-service\"}[5m])))",
+          "format": "time_series",
+          "intervalFactor": 1,
+          "legendFormat": "50th %ile: {{ breaker_state }}",
+          "refId": "B"
+        }
+      ],
+      "thresholds": [],
+      "timeFrom": null,
+      "timeRegions": [],
+      "timeShift": null,
+      "title": "Frontend Circuit Breaker Latency (s)",
+      "tooltip": {
+        "shared": true,
+        "sort": 0,
+        "value_type": "individual"
+      },
+      "type": "graph",
+      "xaxis": {
+        "buckets": null,
+        "mode": "time",
+        "name": null,
+        "show": true,
+        "values": []
+      },
+      "yaxes": [
+        {
+          "format": "s",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        },
+        {
+          "format": "short",
+          "label": null,
+          "logBase": 1,
+          "max": null,
+          "min": null,
+          "show": true
+        }
+      ],
+      "yaxis": {
+        "align": false,
+        "alignLevel": null
+      }
     }
   ],
   "refresh": "10s",
@@ -1315,5 +1512,5 @@
   "timezone": "",
   "title": "Feelgood Web",
   "uid": "9XgacDdZz",
-  "version": 11
+  "version": 13
 }
