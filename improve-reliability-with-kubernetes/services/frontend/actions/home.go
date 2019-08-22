@@ -40,7 +40,7 @@ func getMessage() (string, error) {
 	}
 
 	if resp.StatusCode != http.StatusOK {
-		return "", fmt.Errorf("API returned %d response. Message: %s", resp.StatusCode, msg.Message)
+		return "", fmt.Errorf("API returned %d response", resp.StatusCode)
 	}
 
 	return msg.Message, nil

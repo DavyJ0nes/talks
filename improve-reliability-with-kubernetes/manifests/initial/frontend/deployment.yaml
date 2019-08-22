@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
         - name: frontend
-          image: davyj0nes/gophercon-frontend:v0.4.0
+          image: 'davyj0nes/gophercon-frontend:v0.4.0'
           ports:
             - containerPort: 4200
           envFrom:

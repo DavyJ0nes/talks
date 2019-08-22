@@ -1,8 +1,8 @@
-# Productionise any Application within Kubernetes using Sidecar Containers
+# Improve Reliability of any Application using Kubernetes and Patterns
 
 # Table of Contents
 
-- [Productionise any Application within Kubernetes using Sidecar Containers](#productionise-any-application-within-kubernetes-using-sidecar-containers)
+- [Improve Reliability of any Application using Kubernetes and Patterns](#improve-reliability-of-any-application-using-kubernetes-and-patterns)
 - [Table of Contents](#table-of-contents)
   - [Abstract](#abstract)
   - [Demo](#demo)
@@ -106,7 +106,7 @@ and import this into Grafana.
 
 ##### SLOs
 
-This dashboard and the prometheus recording rules are are defined [here](./core/prometheus-rules)
+This dashboard and the Prometheus recording rules are are defined [here](./core/prometheus-rules)
 Allow us to define a Service Level Objective for our service. The SLO that is
 defined is:
 
@@ -130,7 +130,7 @@ Now that we have some metrics we also want to be able to get the event data
 from the API that is being emitted to a log file within the container. As
 Kubernetes reads logs from STDOUT this is not ideal and we will need to create
 an adapter to adapt the log format to a structured logging format that can then
-be inserted into something like elasticsearch.
+be inserted into something like Elasticsearch.
 
 #### Circuit Breaker - Ambassador Pattern
 
@@ -141,4 +141,4 @@ external service it will trip its circuit breaker and return a canned response
 to the frontend and reduce the load being made to the API.
 
 We should see the error rate drop off considerably and our SLO return to an
-accetable level.
+acceptable level.
